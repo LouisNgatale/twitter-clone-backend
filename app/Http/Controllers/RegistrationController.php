@@ -9,9 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
+
 class RegistrationController extends Controller
 {
     /**
+     * This function validates the form request from api and returns either
+     * an array of errors or saves the user to the database and returns a json
+     * response message.
      * @throws ValidationException
      */
     public function register(Request $request): \Illuminate\Http\JsonResponse
