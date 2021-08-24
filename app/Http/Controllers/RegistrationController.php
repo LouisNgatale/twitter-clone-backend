@@ -42,7 +42,7 @@ class RegistrationController extends Controller
             'dob'=>'required|before:' . $before,
             'phone_number' => 'required',
             'profile_image' => 'string',
-            'password'=>'string'
+            'password'=>'string|min:5'
         ];
 
         // Validate
@@ -55,7 +55,9 @@ class RegistrationController extends Controller
 
         // Continue with registration
 
-        //TODO: Save image to file storage
+        // TODO: Save image to file storage
+
+        // TODO: Email verification
 
         $validated = $validator->validated();
 
