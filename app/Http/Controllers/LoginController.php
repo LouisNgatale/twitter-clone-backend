@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -52,17 +53,19 @@ class LoginController extends Controller
             if ($user_data){
                 // Validate password
                 if (Hash::check($password,$user_data->password)){
-                    return response()->json(['success' => "Logged in"], 201);
+                    // Generate and assign token
+                    $user = User::find($user_data->id);
+                    $token = $user->createToken('auth_token',['profile:all']);
+
+                    return response()->json(['token' => $token->plainTextToken], 201);
                 }else{
                     return response()->json(['error' => "Password is wrong"], 201);
                 }
             }else{
                 return response()->json(['error' => "Email not found"], 201);
             }
-
-            // Assign token
-
-        }else if ($request->has("username")){
+        }
+        else if ($request->has("username")){
             $rules = [
                 'username' => 'required|string',
                 'password' => 'required|string|min:5'
@@ -96,7 +99,11 @@ class LoginController extends Controller
             if ($user_data){
                 // Validate password
                 if (Hash::check($password,$user_data->password)){
-                    return response()->json(['error' => "Logged in"], 201);
+                    // Generate and assign token
+                    $user = User::find($user_data->id);
+                    $token = $user->createToken('auth_token',['profile:all']);
+
+                    return response()->json(['token' => $token->plainTextToken], 201);
                 }else{
                     return response()->json(['error' => "Password is wrong"], 201);
                 }
@@ -106,8 +113,8 @@ class LoginController extends Controller
 
             // Assign token
         }
-//        $token = $request->user()->createToken("access_token");
-//
-//        return ['token' => $token->plainTextToken];
+        else{
+            return response()->json(['error' => "Invalid request"], 201);
+        }
     }
 }
