@@ -110,6 +110,8 @@ class LoginController extends Controller
             }else{
                 return response()->json(['error' => "Username not found"], 201);
             }
+
+            // Assign token
         }
         else{
             return response()->json(['error' => "Invalid request"], 201);
