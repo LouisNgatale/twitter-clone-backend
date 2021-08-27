@@ -36,7 +36,10 @@ class LoginController extends Controller
 
             // Return error response if validation fails
             if ($validator->fails()){
-                return response()->json(['errors' => $validator->errors()->toArray()], 201);
+                return response()->json([
+                    'status' => "Error",
+                    'response_message' => 'Incorrect inputs'
+                ], 201);
             }
 
             $validated = $validator->validated();
@@ -47,20 +50,22 @@ class LoginController extends Controller
             $user = User::where('email', $email)->first();
 
             if (! $user || ! Hash::check($password, $user->password)) {
-                return response()->json(['error' => 'The provided credentials are incorrect.'], 201);
-
+                return response()->json([
+                    'status' => "Error",
+                    'response_message' => 'The provided credentials are incorrect.'
+                ], 201);
             }
 
             $token = $user->createToken('auth_token',['profile:all']);
 
             return response()->json([
-                'user_id' => $token->plainTextToken,
-                'username' => $token->plainTextToken,
-                'email' => $token->plainTextToken,
-                'firstname' => $token->plainTextToken,
-                'secondname' => $token->plainTextToken,
-                'profile_picture' => $token->plainTextToken,
-                'response_code' => "201",
+                'user_id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'firstname' => $user->name,
+                'secondname' => $user->name,
+                'profile_picture' => " ",
+                'status' => "Success",
                 'response_message' => "Logging Successful",
                 'token' => $token->plainTextToken,
             ], 201);
@@ -83,7 +88,10 @@ class LoginController extends Controller
 
             // Return error response if validation fails
             if ($validator->fails()){
-                return response()->json(['errors' => $validator->errors()->toArray()], 201);
+                return response()->json([
+                    'status' => "Error",
+                    'response_message' => 'Incorrect inputs'
+                ], 201);
             }
 
             $validated = $validator->validated();
@@ -94,13 +102,25 @@ class LoginController extends Controller
             $user = User::where('username', $username)->first();
 
             if (! $user || ! Hash::check($password, $user->password)) {
-                return response()->json(['error' => 'The provided credentials are incorrect.'], 201);
-
+                return response()->json([
+                    'status' => "Error",
+                    'response_message' => 'The provided credentials are incorrect.'
+                ], 201);
             }
 
             $token = $user->createToken('auth_token',['profile:all']);
 
-            return response()->json(['token' => $token->plainTextToken], 201);
+            return response()->json([
+                'user_id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'firstname' => $user->name,
+                'secondname' => $user->name,
+                'profile_picture' => " ",
+                'status' => "Success",
+                'response_message' => "Logging Successful",
+                'token' => $token->plainTextToken,
+            ], 201);
         }
         else{
             return response()->json(['error' => "Invalid request"], 201);
