@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -52,7 +53,17 @@ class LoginController extends Controller
 
             $token = $user->createToken('auth_token',['profile:all']);
 
-            return response()->json(['token' => $token->plainTextToken], 201);
+            return response()->json([
+                'user_id' => $token->plainTextToken,
+                'username' => $token->plainTextToken,
+                'email' => $token->plainTextToken,
+                'firstname' => $token->plainTextToken,
+                'secondname' => $token->plainTextToken,
+                'profile_picture' => $token->plainTextToken,
+                'response_code' => "201",
+                'response_message' => "Logging Successful",
+                'token' => $token->plainTextToken,
+            ], 201);
 
         }
         else if ($request->has("username")){
@@ -97,8 +108,11 @@ class LoginController extends Controller
     }
 
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
-
+        $token = $request->bearerToken();
+        DB::table('personal_access_tokens')->where('token', $token)->delete();
+        return response()->json(['success' => $token],201);
+//        return response()->json(['success' => "Logged out successfully"],201);
     }
 }
