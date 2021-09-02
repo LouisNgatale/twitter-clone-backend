@@ -50,7 +50,8 @@ class RegistrationController extends Controller
 
         // Return validation error
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->toArray()], 201);
+//            return response()->json(['errors' => $validator->errors()->toArray()], 201);
+            return response()->json(['errors' => "Error registering"], 201);
         }
 
         // Continue with registration
