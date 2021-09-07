@@ -16,11 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::namespace('Api')->group(function(){
+
+    // Doesn't require authentication to access these routes
+    Route::prefix('auth')->group(function(){
+
+        Route::post('login',[LoginController::class,'login']);
+        Route::post('register',[RegistrationController::class,'register']);
+
+    });
+
+    // Requires authentication to access these routes
+    Route::group([
+        'middleware'=>'auth:sanctum'
+    ], function(){
+
+        Route::post('logout',[LoginController::class,'logout']);
+
+    });
+
 });
-
-Route::post('logout',[LoginController::class,'logout'])->middleware('auth:sanctum');
-
-Route::post('register',[RegistrationController::class,'register']);
-Route::post('login',[LoginController::class,'login']);
