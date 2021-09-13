@@ -7,6 +7,7 @@ use App\Models\Tweet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class TweetController extends Controller
 {
@@ -18,10 +19,21 @@ class TweetController extends Controller
         // Get user id
         $user_id = $request->user()->id;
 
+        // Initialize empty followers array
+        $followers_id = [];
 
         // Get tweets for user's following
-//        return Tweet::whereIn('author_id',User::find($user_id)->followings->id);
-        return User::find($user_id)->followings->id;
-//        return new TweetResource(Tweet::paginate());
+        $followings = User::find($user_id)->followings;
+
+        // Loop through records and obtain ids
+        foreach ($followings as $follower){
+            array_push($followers_id,$follower->id);
+        }
+
+        // Get collection of tweets
+        $collection = Tweet::whereIn('author_id',$followers_id)->paginate(15);
+
+        // Return response
+        return new TweetResource($collection);
     }
 }
