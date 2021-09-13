@@ -27,13 +27,13 @@ Route::namespace('Api')->group(function(){
 
     });
 
-    Route::get('tweets',[TweetController::class,'get']);
 
     // Requires authentication to access these routes
     Route::group([
         'middleware'=>'auth:sanctum'
     ], function(){
-
+        // Tweets
+        Route::get('tweets',[TweetController::class,'get']);
         Route::post('logout',[LoginController::class,'logout']);
 
     });
