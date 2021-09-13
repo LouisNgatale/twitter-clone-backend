@@ -45,4 +45,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /*
+     * Return tweets written by this user
+     * */
+    public function tweets()
+    {
+        $this->hasMany(Tweet::class,"author_id");
+    }
 }

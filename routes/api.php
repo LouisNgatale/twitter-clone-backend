@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\TweetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,8 @@ Route::namespace('Api')->group(function(){
 
     });
 
+    Route::get('tweets',[TweetController::class,'get']);
+
     // Requires authentication to access these routes
     Route::group([
         'middleware'=>'auth:sanctum'
@@ -34,5 +37,7 @@ Route::namespace('Api')->group(function(){
         Route::post('logout',[LoginController::class,'logout']);
 
     });
+
+
 
 });
