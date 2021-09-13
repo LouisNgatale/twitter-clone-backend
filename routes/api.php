@@ -3,7 +3,9 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\TweetController;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,7 +41,9 @@ Route::namespace('Api')->group(function(){
     });
 
     Route::get('users',function (){
-       return \App\Models\User::all();
+        return Cache::remember('users', now()->addSeconds(30),function () {
+           return User::all();
+       });
     });
 
 
