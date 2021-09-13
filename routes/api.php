@@ -38,6 +38,9 @@ Route::namespace('Api')->group(function(){
 
     });
 
+    Route::get('users',function (){
+       return \App\Models\User::all();
+    });
 
 
 });
